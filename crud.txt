@@ -1,0 +1,92 @@
+0) Saúde do servidor
+Invoke-RestMethod -Method Get -Uri "http://localhost:3000/health"
+
+
+Esperado: JSON com ok: true.
+
+1) Listar (GET /items)
+Invoke-RestMethod -Method Get -Uri "http://localhost:3000/api/v1/items"
+
+
+Esperado: array JSON (vazio [] ou com registros).
+
+2) Criar (POST /items)
+
+Ajuste os campos como quiser; abaixo um exemplo mínimo.
+
+$body = @{
+  nomeCompleto = "Matheus de Teste";
+  qra = "TAVARES";
+  re = "200286-0"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/items" -ContentType "application/json" -Body $body
+
+
+Esperado: 201 Created com JSON do item, incluindo id, createdAt, updatedAt.
+Anote o id retornado para os passos seguintes (ex.: $id = 8).
+
+(Opcional) Guarde o id em variável:
+
+$res = Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/items" -ContentType "application/json" -Body $body
+$id = $res.id
+$id
+
+3) Buscar por ID (GET /items/:id)
+Invoke-RestMethod -Method Get -Uri "http://localhost:3000/api/v1/items/$id"
+
+
+Esperado: JSON do item criado.
+
+4) Atualizar (PUT /items/:id)
+
+Envie apenas os campos que quer mudar; o resto permanece.
+
+$upd = @{
+  qra = "ATUALIZADO";
+  re = "200286-0"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Method Put -Uri "http://localhost:3000/api/v1/items/$id" -ContentType "application/json" -Body $upd
+
+
+Esperado: JSON do item com os campos atualizados e updatedAt mais recente.
+
+5) Apagar (DELETE /items/:id)
+Invoke-RestMethod -Method Delete -Uri "http://localhost:3000/api/v1/items/$id"
+
+
+Esperado: Status 204 (sem corpo).
+(Se o PowerShell não mostrar nada, é normal.)
+
+6) Confirmar exclusão
+Invoke-RestMethod -Method Get -Uri "http://localhost:3000/api/v1/items/$id"
+
+
+Esperado: erro/404 (item não encontrado).
+
+Casos de erro (importantes pra validar)
+A) ID inválido (não numérico)
+Invoke-RestMethod -Method Get -Uri "http://localhost:3000/api/v1/items/abc"
+
+
+Esperado: 400 com { error: "id inválido" }.
+
+B) Criar com corpo vazio
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/items" -ContentType "application/json" -Body "{}"
+
+
+Esperado: 400 com { error: "corpo vazio" }.
+
+C) Atualizar ID inexistente
+$upd = @{ qra = "X" } | ConvertTo-Json
+Invoke-RestMethod -Method Put -Uri "http://localhost:3000/api/v1/items/99999" -ContentType "application/json" -Body $upd
+
+
+Esperado: 404 com { error: "não encontrado" }.
+
+D) Deletar ID inexistente
+Invoke-RestMethod -Method Delete -Uri "http://localhost:3000/api/v1/items/99999"
+
+
+Esperado: 404 com { error: "não encontrado" }.
