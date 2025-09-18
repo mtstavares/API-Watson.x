@@ -27,7 +27,7 @@ const wx = WatsonXAI.newInstance({
 
 async function generateText(prompt, opts = {}){
     const parameters = {
-        max_new_tokens: 250,
+        max_new_tokens: 1000,
         temperature: 0.7,
         top_p: 0.9,
     }
