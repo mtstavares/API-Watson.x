@@ -19,7 +19,6 @@ Além do aprendizado técnico, o projeto também busca validar ideias que poder�
 ![Express](https://img.shields.io/badge/Express.js-5.x-lightgrey?logo=express)  
 ![Swagger](https://img.shields.io/badge/Swagger-API--Docs-brightgreen?logo=swagger)  
 ![IBM Watsonx](https://img.shields.io/badge/IBM-Watsonx-blue?logo=ibm)  
-![License](https://img.shields.io/badge/License-MIT-yellow)  
 ![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-orange)
 
 
