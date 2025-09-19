@@ -1,0 +1,332 @@
+[
+  {
+    "id": 1,
+    "nomeCompleto": "FUNCIONARIO CICLANO",
+    "qra": "CICLANO",
+    "dataNascimento": "1998-09-27",
+    "posto": "SD PM - 1C",
+    "re": "200285-0",
+    "cpf": "000000000",
+    "situacao": "ATIVO",
+    "opm": "DTIC - DTIC - DPT PLAN CIBER -",
+    "codigoOpm": "206010510",
+    "documentos": {
+      "rg": "00000000-0/SP",
+      "cnh": {
+        "numero": "0000000000",
+        "categoria": "AB",
+        "vencimento": "2032-02-18"
+      }
+    },
+    "contatos": {
+      "emailFuncional": "mciclano@email.com.br",
+      "telefone": "11-123456789"
+    },
+    "caracteristicasFisicas": {
+      "estaturaM": 1.64,
+      "cabelo": "CASTANHOS LISO",
+      "olhos": "CASTANHOS",
+      "cutis": "BRANCA",
+      "tipoSanguineo": "A-"
+    },
+    "createdAt": "2025-09-15T00:00:00.000Z",
+    "updatedAt": "2025-09-15T00:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "nomeCompleto": "FUNCIONÁRIO BELTRANO",
+    "qra": "BELTRANO",
+    "dataNascimento": "1978-08-12",
+    "posto": "MAJ PM",
+    "re": "100333-0",
+    "cpf": "1111111111",
+    "situacao": "ATIVO",
+    "opm": "DTIC - DTIC - DPT PLAN CIBER -",
+    "codigoOpm": "206010510",
+    "documentos": {
+      "rg": "11111111-1/SP",
+      "cnh": {
+        "numero": "1111111111",
+        "categoria": "AB",
+        "vencimento": "2032-02-18"
+      }
+    },
+    "contatos": {
+      "emailFuncional": "beltrano@email.com.br",
+      "telefone": "11-987654321"
+    },
+    "caracteristicasFisicas": {
+      "estaturaM": 1.71,
+      "cabelo": "PRETOS LISO",
+      "olhos": "PRETOS",
+      "cutis": "AMARELA",
+      "tipoSanguineo": "A+"
+    },
+    "createdAt": "2025-09-15T00:00:00.000Z",
+    "updatedAt": "2025-09-15T00:00:00.000Z"
+  },
+  {
+    "id": 3,
+    "nomeCompleto": "FUNCIONÁRIO FULANO",
+    "qra": "FULANO",
+    "dataNascimento": "1983-06-13",
+    "posto": "CAP PM",
+    "re": "104550-4",
+    "cpf": "2222222222",
+    "situacao": "ATIVO",
+    "opm": "DTIC - DTIC - DPT PLAN CIBER -",
+    "codigoOpm": "206010510",
+    "documentos": {
+      "rg": "22222222-2/SP",
+      "cnh": {
+        "numero": "2222222222",
+        "categoria": "B",
+        "vencimento": "2031-09-20"
+      }
+    },
+    "contatos": {
+      "emailFuncional": "fulano@email.com.br",
+      "telefone": "11-111111111"
+    },
+    "caracteristicasFisicas": {
+      "estaturaM": 1.79,
+      "cabelo": "CASTANHOS LISO",
+      "olhos": "CASTANHOS",
+      "cutis": "BRANCA",
+      "tipoSanguineo": "A+"
+    },
+    "createdAt": "2025-09-15T00:00:00.000Z",
+    "updatedAt": "2025-09-15T00:00:00.000Z"
+  },
+  {
+    "id": 4,
+    "nomeCompleto": "FUNCIONARIO TAL",
+    "qra": "TAL",
+    "dataNascimento": "1985-01-14",
+    "posto": "1. TEN PM",
+    "re": "126157-6",
+    "cpf": "3333333333",
+    "situacao": "ATIVO",
+    "opm": "DTIC - DTIC - DPT PLAN CIBER -",
+    "codigoOpm": "206010510",
+    "documentos": {
+      "rg": "33333333-3/SP",
+      "cnh": {
+        "numero": "3333333333",
+        "categoria": "AB",
+        "vencimento": "2033-02-22"
+      }
+    },
+    "contatos": {
+      "emailFuncional": "tal@email.com.br",
+      "telefone": "11-222222222"
+    },
+    "caracteristicasFisicas": {
+      "estaturaM": 1.75,
+      "cabelo": "CASTANHOS ONDULADO",
+      "olhos": "CASTANHOS",
+      "cutis": "PARDA",
+      "tipoSanguineo": "O+"
+    },
+    "createdAt": "2025-09-15T00:00:00.000Z",
+    "updatedAt": "2025-09-15T00:00:00.000Z"
+  },
+  {
+    "id": 5,
+    "nomeCompleto": "FUNCIONARIO SEILA",
+    "qra": "SEILA",
+    "dataNascimento": "1971-03-24",
+    "posto": "SUBTEN PM",
+    "re": "103050-7",
+    "cpf": "4444444444",
+    "situacao": "ATIVO",
+    "opm": "DTIC - DTIC - DPT PLAN CIBER -",
+    "codigoOpm": "206010510",
+    "documentos": {
+      "rg": "44444444-4/SP",
+      "cnh": {
+        "numero": "4444444444",
+        "categoria": "AD",
+        "vencimento": "2028-08-24"
+      }
+    },
+    "contatos": {
+      "emailFuncional": "seila@email.com.br",
+      "telefone": "11-999999999"
+    },
+    "caracteristicasFisicas": {
+      "estaturaM": 1.72,
+      "cabelo": "CASTANHOS CRESPO",
+      "olhos": "CASTANHOS",
+      "cutis": "PARDA",
+      "tipoSanguineo": "A+"
+    },
+    "createdAt": "2025-09-15T00:00:00.000Z",
+    "updatedAt": "2025-09-15T00:00:00.000Z"
+  },
+  {
+    "id": 6,
+    "nomeCompleto": "FUNCIONARIO SEMIDEIAS",
+    "qra": "SEMIDEIAS",
+    "dataNascimento": "1987-07-22",
+    "posto": "2. SGT PM",
+    "re": "144092-6",
+    "cpf": "5555555555",
+    "situacao": "ATIVO",
+    "opm": "DTIC - DTIC - DPT PLAN CIBER -",
+    "codigoOpm": "206010510",
+    "documentos": {
+      "rg": "55555555-5/SP",
+      "cnh": {
+        "numero": "5555555555",
+        "categoria": "B",
+        "vencimento": "2028-08-24"
+      }
+    },
+    "contatos": {
+      "emailFuncional": "semideias@email.com.br",
+      "telefone": "11-888888888"
+    },
+    "caracteristicasFisicas": {
+      "estaturaM": 1.82,
+      "cabelo": "PRETOS CRESPO",
+      "olhos": "PRETOS",
+      "cutis": "BRANCA",
+      "tipoSanguineo": "O+"
+    },
+    "createdAt": "2025-09-15T00:00:00.000Z",
+    "updatedAt": "2025-09-15T00:00:00.000Z"
+  },
+  {
+    "id": 7,
+    "nomeCompleto": "FUNCIONARIO INCRIATIVO",
+    "qra": "INCRIATIVO",
+    "dataNascimento": "1991-01-28",
+    "posto": "2. SGT PM",
+    "re": "142467-0",
+    "cpf": "6666666666",
+    "situacao": "ATIVO",
+    "opm": "DTIC - DTIC - DPT PLAN CIBER -",
+    "codigoOpm": "206010510",
+    "documentos": {
+      "rg": "66666666-6/SP",
+      "cnh": {
+        "numero": "6666666666",
+        "categoria": "AB",
+        "vencimento": "2025-01-28"
+      }
+    },
+    "contatos": {
+      "emailFuncional": "incriativo@email.com.br",
+      "telefone": "11-777777777"
+    },
+    "caracteristicasFisicas": {
+      "estaturaM": 1.83,
+      "cabelo": "CASTANHOS LISO",
+      "olhos": "CASTANHOS",
+      "cutis": "PARDA",
+      "tipoSanguineo": "A+"
+    },
+    "createdAt": "2025-09-15T00:00:00.000Z",
+    "updatedAt": "2025-09-18T17:36:05.313Z"
+  },
+  {
+    "id": 8,
+    "nomeCompleto": "FUNCIONARIA FEMININA",
+    "qra": "FEMININA",
+    "dataNascimento": "1991-07-08",
+    "posto": "SD PM - 1C",
+    "re": "193389-2",
+    "cpf": "7777777777",
+    "situacao": "ATIVO",
+    "opm": "DTIC - DTIC - DPT PLAN CIBER -",
+    "codigoOpm": "206010510",
+    "documentos": {
+      "rg": "77777777-7/SP",
+      "cnh": {
+        "numero": "7777777777",
+        "categoria": "B",
+        "vencimento": "2033-03-23"
+      }
+    },
+    "contatos": {
+      "emailFuncional": "feminina@email.com.br",
+      "telefone": "11-00000000"
+    },
+    "caracteristicasFisicas": {
+      "estaturaM": 1.59,
+      "cabelo": "PRETOS LISO",
+      "olhos": "PRETOS",
+      "cutis": "PARDA",
+      "tipoSanguineo": "A+"
+    },
+    "createdAt": "2025-09-15T00:00:00.000Z",
+    "updatedAt": "2025-09-15T00:00:00.000Z"
+  },
+  {
+    "id": 9,
+    "nomeCompleto": "FUNCIONARIO VAGABUNDINHO",
+    "qra": "VAGABUNDINHO",
+    "dataNascimento": "1998-08-30",
+    "posto": "SD PM - 1C",
+    "re": "193389-2",
+    "cpf": "8888888888",
+    "situacao": "ATIVO",
+    "opm": "DTIC - DTIC - DPT PLAN CIBER -",
+    "codigoOpm": "206010510",
+    "documentos": {
+      "rg": "88888888-8/SP",
+      "cnh": {
+        "numero": "8888888888",
+        "categoria": "B",
+        "vencimento": "2033-03-23"
+      }
+    },
+    "contatos": {
+      "emailFuncional": "vagabundinho@email.com.br",
+      "telefone": "11-555555555"
+    },
+    "caracteristicasFisicas": {
+      "estaturaM": 1.8,
+      "cabelo": "CASTANHOS LISO",
+      "olhos": "CASTANHOS",
+      "cutis": "BRANCA",
+      "tipoSanguineo": "O+"
+    },
+    "createdAt": "2025-09-15T00:00:00.000Z",
+    "updatedAt": "2025-09-15T00:00:00.000Z"
+  },
+  {
+    "id": 10,
+    "nomeCompleto": "teste2",
+    "qra": "TESTE",
+    "dataNascimento": "1998-08-30",
+    "posto": "SD PM - 1C",
+    "re": "111111-1",
+    "cpf": "8888888888",
+    "situacao": "ATIVO",
+    "opm": "DTIC - DTIC - DPT PLAN CIBER -",
+    "codigoOpm": "206010510",
+    "documentos": {
+      "rg": "88888888-8/SP",
+      "cnh": {
+        "numero": "8888888888",
+        "categoria": "B",
+        "vencimento": "2033-03-23"
+      }
+    },
+    "contatos": {
+      "emailFuncional": "teste@email.com.br",
+      "telefone": "11-123456789"
+    },
+    "caracteristicasFisicas": {
+      "estaturaM": 1.8,
+      "cabelo": "CASTANHOS LISO",
+      "olhos": "CASTANHOS",
+      "cutis": "BRANCA",
+      "tipoSanguineo": "O+"
+    },
+    "createdAt": "2025-09-15T00:00:00.000Z",
+    "updatedAt": "2025-09-19T17:09:28.204Z"
+  }
+]

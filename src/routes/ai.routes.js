@@ -1,11 +1,41 @@
 const express = require('express')
 const { generateText } = require('../services/watson.service')
 
-const { detectIntent } = require('../services/nlp.mapper')
+const { detectIntent, getDeep } = require('../services/nlp.mapper')
 const repo = require('../repositories/item.repository')
 
 
 const router = express.Router()
+
+
+async function replyNatural(res, { intent, context, data = null, fallback, status = 200 }) {
+    let message = null;
+    if (typeof narrarComIA === 'function') {
+        message = await narrarComIA(context, data ?? {});
+    }
+    return res.status(status).json({
+        intent,
+        message: message || fallback,
+        ...(data !== undefined ? { data } : {})
+    });
+}
+
+
+
+function setDeep(obj, path, value) {
+    const parts = path.split('.');
+    let cur = obj;
+    for (let i = 0; i < parts.length; i++) {
+        const key = parts[i];
+        if (i === parts.length - 1) {
+            cur[key] = value;
+        } else {
+            cur[key] = cur[key] || {};
+            cur = cur[key];
+        }
+    }
+    return obj;
+}
 
 
 
@@ -99,16 +129,73 @@ router.post('/assistant', async (req, res, next) => {
         if (!prompt) return res.status(400).json({ error: "Campo prompt é obrigatório" })
 
         const parsed = detectIntent(prompt)
+        console.log('[AI/ASSISTANT][DEBUG]', JSON.stringify({ prompt, parsed }, null, 2));
         switch (parsed.intent) {
-            case 'list': {
+            case 'search': {
+                const { field, value } = parsed.query || {};
+                if (!field || !value) return res.status(400).json({ error: 'consulta inválida' });
+
                 const all = await repo.list();
-                const message = await narrarComIA('Listagem de itens do cadastro', { total: all.length });
-                return res.json({
-                    intent: 'list',
-                    message: message || `Encontrei ${all.length} registro(s).`,
-                    data: all
+                const exactFields = new Set(['re', 'cpf', 'documentos.rg', 'codigoOpm']);
+                const isExact = exactFields.has(field);
+                const valNorm = value.toString().toLowerCase();
+
+                const filtered = all.filter(item => {
+                    const v = getDeep(item, field);
+                    if (v == null) return false;
+                    const s = v.toString().toLowerCase();
+                    return isExact ? s === valNorm : s.includes(valNorm);
                 });
 
+                return replyNatural(res, {
+                    intent: 'search',
+                    context: `Busca por ${field} contendo "${value}"`,
+                    data: filtered,
+                    fallback: `Encontrei ${filtered.length} resultado(s) para ${field} ~ "${value}".`
+                });
+            }
+
+
+            case 'select': {
+                const { section, query } = parsed;
+                if (!section || !query) return res.status(400).json({ error: 'seção ou filtro inválido' });
+
+                const all = await repo.list();
+                const exactFields = new Set(['re', 'cpf', 'documentos.rg', 'codigoOpm']);
+                const isExact = exactFields.has(query.field);
+                const valNorm = query.value.toString().toLowerCase();
+
+                const filtered = all.filter(item => {
+                    const v = getDeep(item, query.field);
+                    if (v == null) return false;
+                    const s = v.toString().toLowerCase();
+                    return isExact ? s === valNorm : s.includes(valNorm);
+                });
+
+                if (filtered.length === 0)
+                    return res.status(404).json({ error: `Nenhum registro encontrado para ${query.field}="${query.value}"` });
+                if (filtered.length > 1)
+                    return res.status(409).json({ error: `Filtro ambíguo: ${filtered.length} registros encontrados. Refine a consulta.` });
+
+                const picked = getDeep(filtered[0], section);
+
+                return replyNatural(res, {
+                    intent: 'select',
+                    context: `Consulta da seção ${section} do registro filtrado por ${query.field}="${query.value}"`,
+                    data: picked,
+                    fallback: `Resultado para ${section}.`
+                });
+            }
+
+
+            case 'list': {
+                const all = await repo.list();
+                return replyNatural(res, {
+                    intent: 'list',
+                    context: 'Listagem de funcionários',
+                    data: all,
+                    fallback: `Encontrei ${all.length} registro(s).`
+                });
             }
 
             case 'get': {
@@ -117,50 +204,86 @@ router.post('/assistant', async (req, res, next) => {
                 const item = all.find(i => i.id === parsed.id);
                 if (!item) return res.status(404).json({ error: `Item ${parsed.id} não encontrado.` });
 
-                const message = await narrarComIA(`Consulta do item ${parsed.id}`, item);
-                return res.json({
+                return replyNatural(res, {
                     intent: 'get',
-                    message: message || `Item ${parsed.id} encontrado.`,
-                    data: item
+                    context: `Consulta do item ${parsed.id}`,
+                    data: item,
+                    fallback: `Item ${parsed.id} encontrado.`
                 });
-
             }
+
             case 'update': {
-                if (!parsed.id) return res.status(400).json({ error: 'informe o id' });
+                const { id, fields, updateTarget, query } = parsed;
 
-                let patch = parsed.fields || {};
-                const m = prompt.match(/\{[\s\S]*\}$/);
-                if (m) {
-                    try { patch = { ...patch, ...JSON.parse(m[0]) }; } catch { }
+                // 1) por filtro + alvo
+                if (updateTarget && query) {
+                    const all = await repo.list();
+                    const exactFields = new Set(['re', 'cpf', 'documentos.rg', 'codigoOpm']);
+                    const isExact = exactFields.has(query.field);
+                    const valNorm = query.value.toString().toLowerCase();
+
+                    const matches = all.filter(item => {
+                        const v = getDeep(item, query.field);
+                        if (v == null) return false;
+                        const s = v.toString().toLowerCase();
+                        return isExact ? s === valNorm : s.includes(valNorm);
+                    });
+
+                    if (matches.length === 0)
+                        return res.status(404).json({ error: `Nenhum registro encontrado para ${query.field} ~ "${query.value}"` });
+                    if (matches.length > 1)
+                        return res.status(409).json({ error: `Filtro ambíguo: ${matches.length} registros encontrados. Refine a consulta.` });
+
+                    const target = matches[0];
+                    const patch = setDeep({}, updateTarget.path, updateTarget.value);
+                    const updated = await repo.update(target.id, patch);
+                    if (!updated) return res.status(404).json({ error: `Item ${target.id} não encontrado.` });
+
+                    return replyNatural(res, {
+                        intent: 'update',
+                        context: `Atualização por filtro (${query.field} ~ "${query.value}")`,
+                        data: { id: target.id, atualizado: patch, resultado: updated },
+                        fallback: `Item ${target.id} atualizado.`
+                    });
                 }
 
-                if (Object.keys(patch).length === 0) {
-                    return res.status(400).json({ error: 'nenhum campo para atualizar foi detectado' });
+                // 2) por id (fallback)
+                if (id) {
+                    let patch = fields || {};
+                    const m = prompt.match(/\{[\s\S]*\}$/);
+                    if (m) { try { patch = { ...patch, ...JSON.parse(m[0]) }; } catch { } }
+                    if (Object.keys(patch).length === 0)
+                        return res.status(400).json({ error: 'nenhum campo para atualizar foi detectado' });
+
+                    const updated = await repo.update(id, patch);
+                    if (!updated) return res.status(404).json({ error: `Item ${id} não encontrado.` });
+
+                    return replyNatural(res, {
+                        intent: 'update',
+                        context: `Atualização do item ${id}`,
+                        data: { atualizado: patch, resultado: updated },
+                        fallback: `Item ${id} atualizado.`
+                    });
                 }
 
-                const updated = await repo.update(parsed.id, patch);
-                if (!updated) return res.status(404).json({ error: `Item ${parsed.id} não encontrado.` });
-
-                const message = await narrarComIA(`Atualização do item ${parsed.id}`, { atualizado: patch, resultado: updated });
-                return res.json({
-                    intent: 'update',
-                    message: message || `Item ${parsed.id} atualizado.`,
-                    data: updated
-                });
-
+                return res.status(400).json({ error: 'informe o id OU um filtro (ex.: "qra TESTE") e o alvo (ex.: "atualize o re ... para ...")' });
             }
+
+
+
             case 'delete': {
                 if (!parsed.id) return res.status(400).json({ error: 'informe o id' });
                 const ok = await repo.remove(parsed.id);
                 if (!ok) return res.status(404).json({ error: `Item ${parsed.id} não encontrado.` });
 
-                const message = await narrarComIA(`Remoção do item ${parsed.id}`, { removido: parsed.id });
-                return res.status(200).json({
+                return replyNatural(res, {
                     intent: 'delete',
-                    message: message || `Item ${parsed.id} removido.`
+                    context: `Remoção do item ${parsed.id}`,
+                    data: { id: parsed.id },
+                    fallback: `Item ${parsed.id} removido.`
                 });
-
             }
+
             default:
                 return res.status(400).json({ error: 'não entendi. Tente: criar, listar, buscar id X, atualizar id X, apagar id X' });
         }

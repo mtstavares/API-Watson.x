@@ -1,92 +1,157 @@
-0) Saúde do servidor
-Invoke-RestMethod -Method Get -Uri "http://localhost:3000/health"
+✅ Ações e perguntas aceitas no prompt
+📋 Listar (intent: list)
+
+listar todos os itens
+
+me mostre todos os funcionários
+
+listar funcionários
+
+mostrar todos
+
+🔎 Buscar (intent: get ou search)
+
+Por ID:
+
+buscar id 7
+
+mostrar id 3
+
+ver detalhes do id 2
+
+Por campo/valor (qra, re, cpf, email, telefone, rg, codigoOpm, posto, situação, nomeCompleto):
+
+buscar qra TESTE
+
+procurar funcionario com re 200285-0
+
+buscar cpf 000000000
+
+mostrar funcionario com nome MATHEUS
+
+🎯 Selecionar campo específico (intent: select)
+
+Perguntas tipo “qual o … do funcionário …”:
+
+Qual o posto do funcionario com qra TESTE?
+
+Me retorne os documentos do funcionário com qra TESTE
+
+Quais os contatos do funcionario com re 200285-0
+
+Qual o tipo sanguíneo do funcionário com cpf 000000000
+
+Seção suportada: posto, documentos, contatos, caracteristicasFisicas, nomeCompleto, re, cpf, opm, etc.
+Se for objeto (ex.: documentos), ele retorna o objeto inteiro.
+
+✏️ Atualizar (intent: update)
+
+Por ID:
+
+atualizar id 7 {"qra":"NOVOQRA"}
+
+editar id 2 {"situacao":"INATIVO"}
+
+Por filtro + alvo:
+
+atualize o re do funcionario com qra TESTE para 111111-1
+
+mude o posto do funcionario com cpf 000000000 para 2º TENENTE
+
+alterar a situação do funcionario com re 200285-0 para INATIVO
+
+🗑️ Deletar (intent: delete)
+
+apagar id 7
+
+remover id 3
+
+excluir id 2
+
+deletar id 5
+
+⚠️ O que não está ativo
+
+Create via prompt: desabilitado no /assistant (só funciona no CRUD base, não no chat).
+
+Perguntas muito abertas sem campo definido (ex.: “me mostre algo sobre TESTE”) caem em unknown.
+
+📌 Resumindo:
+Você pode usar o prompt para listar, buscar, consultar atributos específicos, atualizar (id ou filtro+campo) e deletar.
+
+🔹 Exemplos no PowerShell
+➕ Listar todos
+$b = @{ prompt = "listar todos os itens" } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/ai/assistant" `
+  -ContentType "application/json" -Body $b | ConvertTo-Json -Depth 10
+
+🔎 Buscar por ID
+$b = @{ prompt = "buscar id 7" } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/ai/assistant" `
+  -ContentType "application/json" -Body $b | ConvertTo-Json -Depth 10
+
+🔎 Buscar por campo (qra)
+$b = @{ prompt = "buscar qra TESTE" } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/ai/assistant" `
+  -ContentType "application/json" -Body $b | ConvertTo-Json -Depth 10
+
+🎯 Selecionar campo específico
+$b = @{ prompt = "Qual o posto do funcionario com qra TESTE?" } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/ai/assistant" `
+  -ContentType "application/json" -Body $b | ConvertTo-Json -Depth 10
+
+✏️ Atualizar por ID
+$upd = @'
+{"qra":"NOVOQRA"}
+'@
+$body = @{ prompt = "atualizar id 7 $upd" } | ConvertTo-Json -Depth 10
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/ai/assistant" `
+  -ContentType "application/json" -Body $body | ConvertTo-Json -Depth 10
+
+✏️ Atualizar por filtro + alvo
+$b = @{ prompt = "atualize o re do funcionario com qra TESTE para 111111-1" } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/ai/assistant" `
+  -ContentType "application/json" -Body $b | ConvertTo-Json -Depth 10
+
+🗑️ Deletar
+$b = @{ prompt = "apagar id 7" } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/ai/assistant" `
+  -ContentType "application/json" -Body $b | ConvertTo-Json -Depth 10
 
 
-Esperado: JSON com ok: true.
 
-1) Listar (GET /items)
-Invoke-RestMethod -Method Get -Uri "http://localhost:3000/api/v1/items"
+🔹 Exemplos no CMD (cURL)
+➕ Listar todos
+curl -X POST http://localhost:3000/api/v1/ai/assistant ^
+  -H "Content-Type: application/json" ^
+  -d "{\"prompt\":\"listar todos os itens\"}"
 
+🔎 Buscar por ID
+curl -X POST http://localhost:3000/api/v1/ai/assistant ^
+  -H "Content-Type: application/json" ^
+  -d "{\"prompt\":\"buscar id 7\"}"
 
-Esperado: array JSON (vazio [] ou com registros).
+🔎 Buscar por campo (qra)
+curl -X POST http://localhost:3000/api/v1/ai/assistant ^
+  -H "Content-Type: application/json" ^
+  -d "{\"prompt\":\"buscar qra TESTE\"}"
 
-2) Criar (POST /items)
+🎯 Selecionar campo específico
+curl -X POST http://localhost:3000/api/v1/ai/assistant ^
+  -H "Content-Type: application/json" ^
+  -d "{\"prompt\":\"Qual o posto do funcionario com qra TESTE?\"}"
 
-Ajuste os campos como quiser; abaixo um exemplo mínimo.
+✏️ Atualizar por ID
+curl -X POST http://localhost:3000/api/v1/ai/assistant ^
+  -H "Content-Type: application/json" ^
+  -d "{\"prompt\":\"atualizar id 7 {\\\"qra\\\":\\\"NOVOQRA\\\"}\"}"
 
-$body = @{
-  nomeCompleto = "Matheus de Teste";
-  qra = "TAVARES";
-  re = "200286-0"
-} | ConvertTo-Json
+✏️ Atualizar por filtro + alvo
+curl -X POST http://localhost:3000/api/v1/ai/assistant ^
+  -H "Content-Type: application/json" ^
+  -d "{\"prompt\":\"atualize o re do funcionario com qra TESTE para 111111-1\"}"
 
-Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/items" -ContentType "application/json" -Body $body
-
-
-Esperado: 201 Created com JSON do item, incluindo id, createdAt, updatedAt.
-Anote o id retornado para os passos seguintes (ex.: $id = 8).
-
-(Opcional) Guarde o id em variável:
-
-$res = Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/items" -ContentType "application/json" -Body $body
-$id = $res.id
-$id
-
-3) Buscar por ID (GET /items/:id)
-Invoke-RestMethod -Method Get -Uri "http://localhost:3000/api/v1/items/$id"
-
-
-Esperado: JSON do item criado.
-
-4) Atualizar (PUT /items/:id)
-
-Envie apenas os campos que quer mudar; o resto permanece.
-
-$upd = @{
-  qra = "ATUALIZADO";
-  re = "200286-0"
-} | ConvertTo-Json
-
-Invoke-RestMethod -Method Put -Uri "http://localhost:3000/api/v1/items/$id" -ContentType "application/json" -Body $upd
-
-
-Esperado: JSON do item com os campos atualizados e updatedAt mais recente.
-
-5) Apagar (DELETE /items/:id)
-Invoke-RestMethod -Method Delete -Uri "http://localhost:3000/api/v1/items/$id"
-
-
-Esperado: Status 204 (sem corpo).
-(Se o PowerShell não mostrar nada, é normal.)
-
-6) Confirmar exclusão
-Invoke-RestMethod -Method Get -Uri "http://localhost:3000/api/v1/items/$id"
-
-
-Esperado: erro/404 (item não encontrado).
-
-Casos de erro (importantes pra validar)
-A) ID inválido (não numérico)
-Invoke-RestMethod -Method Get -Uri "http://localhost:3000/api/v1/items/abc"
-
-
-Esperado: 400 com { error: "id inválido" }.
-
-B) Criar com corpo vazio
-Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/v1/items" -ContentType "application/json" -Body "{}"
-
-
-Esperado: 400 com { error: "corpo vazio" }.
-
-C) Atualizar ID inexistente
-$upd = @{ qra = "X" } | ConvertTo-Json
-Invoke-RestMethod -Method Put -Uri "http://localhost:3000/api/v1/items/99999" -ContentType "application/json" -Body $upd
-
-
-Esperado: 404 com { error: "não encontrado" }.
-
-D) Deletar ID inexistente
-Invoke-RestMethod -Method Delete -Uri "http://localhost:3000/api/v1/items/99999"
-
-
-Esperado: 404 com { error: "não encontrado" }.
+🗑️ Deletar
+curl -X POST http://localhost:3000/api/v1/ai/assistant ^
+  -H "Content-Type: application/json" ^
+  -d "{\"prompt\":\"apagar id 7\"}"
